@@ -95,3 +95,7 @@ Echo() {
       EchoPrefixCurrent="$EchoPrefix"
    fi
 }
+Read() {
+   read $@
+   EchoPrefixCurrent="$EchoPrefix"
+}

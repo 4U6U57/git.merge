@@ -1,6 +1,7 @@
 #!/bin/bash
 
 ExeDir="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
+ExeName="$(basename ${BASH_SOURCE[0]})"
 
 # Boolean class
 True=0
@@ -10,14 +11,77 @@ Boolean() {
 }
 
 # Exit behavior
-OnExit() {
-   Echo "Exiting program"
+Exit() {
+   Echo "Exiting program."
+   exit
 }
-trap "OnExit; exit" SIGHUP SIGINT SIGTERM
+trap "Exit" SIGHUP SIGINT SIGTERM
 
 # Echo Configuration
 source $ExeDir/Echo.sh
-EchoPrefix="$(EchoColor Cyan)gitmerge$(EchoColor):"
+EchoPrefix="$(EchoColor Cyan)$ExeName$(EchoColor):"
 
 # Program start
-Echo "Git repository merging utility"
+Echo "$ExeName - Git repository merging utility"
+
+# Find base repo
+BaseName=""
+if [[ -e .git ]]; then
+   bash
+   BaseName=$(basename pwd)
+   Echo "Currently in git repo $BaseName."
+   Echo -n "Would you like to use this as your base? (y/n): "
+   Read Input
+   if [[ $Input != "y" ]]; then
+      Echo "Please change directories, and try again."
+      Exit
+   fi
+   Echo "Setting up $BaseName as base."
+else
+   Echo "No base git repo detected, creating."
+   Echo -n "What would you like to call it? (*): "
+   Read BaseName
+   if [[ $BaseName == "" ]]; then
+      Echo "Invalid name"
+      Exit
+   fi
+   Echo "Setting up $BaseName as new git base."
+   mkdir $BaseName
+   cd $BaseName
+   git init
+   echo -e "# $BaseName\nBase git repo created with $ExeName" > README
+   git add README
+fi
+
+# Initialize base
+OrigDir=".OldFiles"
+mkdir $OrigDir
+git mv * $OrigDir
+git add --all $OrigDir
+git commit -m "$ExeName Initial setup of $BaseName"
+
+while Boolean $True; do
+   ImportDir=".Import"
+   rm -rf $ImportDir
+   Echo "Enter in a URL to merge into $BaseName, or nothing to finish."
+   Echo -n "(URL,\n): "
+   Read RepoUrl
+   if [[ $RepoUrl == "" ]]; then
+      break
+   fi
+   RepoName=$(basename $(basename $RepoUrl) .git)
+   Echo "Merging in $RepoName"
+   git clone $RepoUrl $ImportDir
+   if [[ -e $ImportDir ]]; then
+      git remote add -f Import $ImportDir
+      rm -rf $ImportDir
+      git merge Import/master -m "Merging in $BaseName/$RepoName"
+      git remote rm Import
+      mkdir $OrigDir/$RepoName
+      git add --all $OrigDir
+      git mv * $OrigDir/$RepoName
+      git commit -m "Finalize $BaseName/$RepoName"
+   else
+      Echo "Error cloning in $RepoUrl"
+   fi
+done
