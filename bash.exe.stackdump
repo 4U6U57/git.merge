@@ -1,0 +1,7 @@
+Exception: STATUS_STACK_OVERFLOW at eip=61102E63
+eax=611D3060 ebx=203385D8 ecx=00000000 edx=FFFFFFFF esi=00000008 edi=00000000
+ebp=203387E8 esp=004D3000 program=C:\cygwin\bin\bash.exe, pid 12164, thread unknown (0x2C4C)
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+203387E8  61102E63 (2003C8F8, 00000000, 20338800, 0000001B)
