@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ExeDir="$(cd $(dirname "${BASH_SOURCE[0]}") && pwd)"
+
 # Boolean class
 True=0
 False=1
@@ -13,27 +15,9 @@ OnExit() {
 }
 trap "OnExit; exit" SIGHUP SIGINT SIGTERM
 
-# Output class
-EchoPrefix="gitmerge:"
-EchoPrefixCurrent=$EchoPrefix
-Echo() {
-   EchoHasFlags=$True
-   EchoFlags=""
-   while Boolean $EchoHasFlags; do
-      if [[ $1 == "-n" || $1 == "-e" || $1 == "-E" ]]; then
-         EchoFlags+="$1 "
-         shift
-      else
-         EchoHasFlags=$False
-      fi
-   done
-   echo $EchoFlags "$EchoPrefixCurrent $@"
-   if echo "${EchoFlags//-/\-}" | grep -q "\-n"; then
-      EchoPrefixCurrent=""
-   else
-      EchoPrefixCurrent=$EchoPrefix
-   fi
-}
+# Echo Configuration
+source $ExeDir/Echo.sh
+EchoPrefix="$(EchoColor Cyan)gitmerge$(EchoColor):"
 
 # Program start
-Echo "GITMERGE - Git repository merging utility"
+Echo "Git repository merging utility"
