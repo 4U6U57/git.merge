@@ -23,54 +23,22 @@ EchoPrefixCurrent="$EchoPrefix"
 EchoColor() {
    ColorCode="0m"
    case $1 in
-      Black)
-         ColorCode="0;30m"
-         ;;
-      Red)
-         ColorCode="0;31m"
-         ;;
-      Green)
-         ColorCode="0;32m"
-         ;;
-      Orange)
-         ColorCode="0;33m"
-         ;;
-      Blue)
-         ColorCode="0;34m"
-         ;;
-      Purple)
-         ColorCode="0;35m"
-         ;;
-      Cyan)
-         ColorCode="0;36m"
-         ;;
-      LightGray)
-         ColorCode="0;37m"
-         ;;
-      DarkGray)
-         ColorCode="1;30m"
-         ;;
-      LightRed)
-         ColorCode="1;31m"
-         ;;
-      LightGreen)
-         ColorCode="1;32m"
-         ;;
-      Yellow)
-         ColorCode="1;33m"
-         ;;
-      LightBlue)
-         ColorCode="1;34m"
-         ;;
-      LightPurple)
-         ColorCode="1;35m"
-         ;;
-      LightCyan)
-         ColorCode="1;36m"
-         ;;
-      White)
-         ColorCode="1;37m"
-         ;;
+      Black) ColorCode="0;30m";;
+      Red) ColorCode="0;31m";;
+      Green) ColorCode="0;32m";;
+      Orange) ColorCode="0;33m";;
+      Blue) ColorCode="0;34m";;
+      Purple) ColorCode="0;35m";;
+      Cyan) ColorCode="0;36m";;
+      LightGray) ColorCode="0;37m";;
+      DarkGray) ColorCode="1;30m";;
+      LightRed) ColorCode="1;31m";;
+      LightGreen) ColorCode="1;32m";;
+      Yellow) ColorCode="1;33m";;
+      LightBlue) ColorCode="1;34m";;
+      LightPurple) ColorCode="1;35m";;
+      LightCyan) ColorCode="1;36m";;
+      White) ColorCode="1;37m";;
    esac
    echo -e "\033[0;$ColorCode"
 }
