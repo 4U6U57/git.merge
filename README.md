@@ -5,21 +5,20 @@ Git repository merging utility
 This script requires a Unix enviornment running Bash (available for Linux,
 macOS, and Windows Insider Preview Fast).
 
-To get it, simply run
+To install it, simply run
 ```
 git clone http://github.com/4U6U57/gitmerge ~/bin/
+cd ~/bin/gitmerge
+make install
 ```
 
-Then, run it from wherever you want with `~/bin/gitmerge/gitmerge.sh` (add
-`~/bin/gitmerge` to your PATH to make it easier).
-
 ## Usage
-Simply run `~/bin/gitmerge/gitmerge.sh` in the directory you would like to
-create the merged repository.
+Simply run `gitmerge.sh` in the directory you would like to create the merged
+repository. Use "." if you would like to use the current directory.
 
 ## File Input
 Format a file as follows, for automated merging, then run with input redirect
-like so `~/bin/gitmerge/gitmerge.sh < FILE`
+like so `gitmerge.sh < FILE`
 
 ```
 MERGE_NAME
@@ -37,7 +36,7 @@ where
   merge others into)
 * `DOWNLOAD_URL` is the git clone URL, either in SSH or HTML form, of each repo
   you would like to merge into the base repo. Each URL should be on its own
-  line. Examples are below:
+  line. Examples of repo URLs below:
    * `git@github.com:4U6U57/gitmerge`
    * `http://github.com/4U6U57/gitmerge`
 * `[DIRECTORY_NAME]` is the optional name of the subdirectory in which the
