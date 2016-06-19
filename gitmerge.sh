@@ -17,9 +17,15 @@ Exit() {
 }
 trap "Error 'Program canceled by user'" SIGHUP SIGINT SIGTERM
 Error() {
+   echo
    Echo "$(EchoColor Red)$@$(EchoColor)"
-   if [[ $BaseDir != "" ]]; then
-      rm -rf $BaseDir
+   if [[ $BaseDir != "" && -e $BaseDir ]]; then
+      Echo "Quitting from error. Would you like to delete base repo directory $BaseName? (y/n)"
+      Read -p $ReadPrefix -t 10 Input
+      if [[ $Input == "y" ]]; then
+         Echo "Deleting $(EchoColor Yellow)$BaseDir$(EchoColor)"
+         rm -rf $BaseDir
+      fi
    fi
    Exit
 }
@@ -117,5 +123,12 @@ if [[ $BaseUrl != "" ]]; then
    git remote add origin $BaseUrl
    git push origin +master
    git push origin --tags
+   Echo "Successfully pushed $BaseName"
+   Echo "Would you like to delete base repo directory $BaseName? (y/n)"
+   Read -p $ReadPrefix -t 15 Input
+   if [[ $Input == "y" ]]; then
+      Echo "Deleting $(EchoColor Yellow)$BaseDir$(EchoColor)"
+      rm -rf $BaseDir
+   fi
 fi
 Exit
