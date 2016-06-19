@@ -60,7 +60,10 @@ fi
 # Initializing base repo, if necessary
 if [[ ! -e README.md ]]; then
    Echo "No README.md found, creating"
-   echo -e "# $BaseName\nBase git repo created with $ExeName\n\n## Contents\n" > README.md
+   echo "# $BaseName" >> README.md
+   echo "Base git repo created with $ExeName" >> README.md
+   echo >> README.md
+   echo "## Contents" >> README.md
 fi
 if [[ ! -e .git/ ]]; then
    Echo "Directory not yet set up with git, initializing"
