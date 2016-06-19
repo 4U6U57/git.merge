@@ -103,7 +103,13 @@ while Boolean $True; do
       rm -rf $ImportDir
       git merge Import/master -m "[$ExeName] Merging $RepoName into $BaseName/$RepoName"
       git remote rm Import
-      echo "* [$RepoName](./$RepoName)" >> README.md
+      if [[ -e $RepoName/README.md ]]; then
+         echo "* [$RepoName]($RepoName/README.md)" >> README.md
+      elif [[ -e $RepoName/README ]]; then
+         echo "* [$RepoName]($RepoName/README)" >> README.md
+      else
+         echo "* $RepoName" >> README.md
+      fi
       git add -A
       git commit -m "[$ExeName] Finalizing $BaseName/$RepoName"
       git tag $RepoName
@@ -122,7 +128,7 @@ if [[ $BaseUrl != "" ]]; then
    Echo "Pushing $(EchoColor Yellow)$BaseName$(EchoColor) to $(EchoColor Yellow)$BaseUrl$(EchoColor)"
    git remote add origin $BaseUrl
    git push origin +master
-   git push origin --tags
+   git push -f origin --tags
    Echo "Successfully pushed $BaseName"
    Echo "Would you like to delete base repo directory $BaseName? (y/n)"
    Read -p $ReadPrefix -t 15 Input

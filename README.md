@@ -45,7 +45,7 @@ where
   (default for the `git clone` command)
 * `[UPLOAD_URL]` is the optional git clone URL of where you would like to push
   the final merged repo when it is completed. Note that there must be exactly
-  one blank line in between the last `DOWNLOAD_URL` and the `UPLAOD_URL`
+  one blank line in between the last `DOWNLOAD_URL` and the `UPLOAD_URL`
 * `[y]` is the literal letter `y`, placed on the line after the `UPLOAD_URL` if
   you would like to delete the base repo directory after pushing it
 
