@@ -106,10 +106,9 @@ while Boolean $True; do
       rm -rf $ImportDir
       git merge Import/master -m "[$ExeName] Merging $RepoName into $BaseName/$RepoName"
       git remote rm Import
-      if [[ -e $RepoName/README.md ]]; then
-         echo "* [$RepoName]($RepoName/README.md)" >> README.md
-      elif [[ -e $RepoName/README ]]; then
-         echo "* [$RepoName]($RepoName/README)" >> README.md
+      Readme=( $RepoName/README* )
+      if [[ ${Readme[0]} != '$RepoName/README*' ]]; then
+         echo "* [$RepoName](${Readme[0]})" >> README.md
       else
          echo "* $RepoName" >> README.md
       fi
