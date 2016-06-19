@@ -14,11 +14,11 @@ Then, run it from wherever you want with `~/bin/gitmerge/gitmerge.sh` (add
 `~/bin/gitmerge` to your PATH to make it easier).
 
 ## Usage
-Simply run `~/bin/gitmerge` in the directory you would like to 
+Simply run `~/bin/gitmerge/gitmerge.sh` in the directory you would like to 
 
 ## File Input
 Format a file as follows, for automated merging, then run with input redirect
-like so `~/bin/gitmerge < FILE`
+like so `~/bin/gitmerge/gitmerge.sh < FILE`
 
 ```
 MERGE_NAME
@@ -47,3 +47,15 @@ where
   one blank line in between the last `DOWNLOAD_URL` and the `UPLAOD_URL`
 * `[y]` is the literal letter `y`, placed on the line after the `UPLOAD_URL` if
   you would like to delete the base repo directory after pushing it
+
+Here is an example file, merging in the repos *gitmerge* and *vimrc* into a repo
+*example*, and uploading it to the repo *example.merge*. *gitmerge* is saved
+into the subdirectory *merge*, and *vimrc* into the default subdirectory name.
+
+```
+example
+git@github.com:4U6U57/gitmerge merge
+git@github.com:4U6U57/vimrc
+
+git@github.com:4U6U57/example.merge
+```
