@@ -15,9 +15,12 @@ Exit() {
    Echo "Exiting program."
    exit
 }
-trap "Exit" SIGHUP SIGINT SIGTERM
+trap "Error 'Program canceled by user'" SIGHUP SIGINT SIGTERM
 Error() {
    Echo "$(EchoColor Red)$@$(EchoColor)"
+   if [[ $BaseDir != "" ]]; then
+      rm -rf $BaseDir
+   fi
    Exit
 }
 
@@ -27,7 +30,7 @@ EchoPrefix="$(EchoColor Cyan)$ExeName$(EchoColor):"
 ReadPrefix="$(EchoColor Yellow)$ExeName$(EchoColor)$"
 
 # Program start
-Echo "$ExeName - Git repository merging utility"
+Echo "$(EchoColor Cyan)$ExeName - Git repository merging utility$(EchoColor)"
 
 # Find base repo
 BaseName=""
@@ -36,22 +39,26 @@ Read -p $ReadPrefix -t 15 BaseName
 if [[ $BaseName == "" ]]; then
    Error "Invalid name for directory"
 elif [[ $BaseName == "." ]]; then
-   Echo "Using the current directory as the base repo directory."
    BaseDir=$(pwd)
    BaseName=$(basename $BaseDir)
+   Echo "Setting up current directory $(EchoColor Yellow)$BaseName$(EchoColor) as git base."
 elif [[ -e $BaseName ]]; then
    Error "Directory $BaseName already exists"
 else
-   Echo "Setting up $BaseName as new git base."
+   Echo "Setting up $(EchoColor Yellow)$BaseName$(EchoColor) as new git base."
    mkdir $BaseName
    cd $BaseName
    BaseDir=$(pwd)
 fi
 
 # Initializing base repo, if necessary
+if [[ ! -e README.md ]]; then
+   Echo "No README.md found, creating"
+   echo -e "# $BaseName\nBase git repo created with $ExeName\n\n## Contents\n" > README.md
+fi
 if [[ ! -e .git/ ]]; then
+   Echo "Directory not yet set up with git, initializing"
    git init
-   echo -e "# $BaseName\nBase git repo created with $ExeName" > README
    git add -A
    git commit -m "[$ExeName] Initial commit"
 fi
@@ -72,7 +79,11 @@ while Boolean $True; do
    else
       RepoName=$(basename $(basename $RepoUrl) .git)
    fi
-   Echo "Cloning in $RepoUrl into $RepoName"
+   if [[ -e $RepoName ]]; then
+      rm -rf $BaseDir
+      Error "Attempting to add subdirectory that already exists"
+   fi
+   Echo "Cloning $(EchoColor Yellow)$RepoUrl$(EchoColor) into $(EchoColor Yellow)$BaseName/$RepoName$(EchoColor)"
    git clone $RepoUrl $ImportDir
    if [[ -e $ImportDir ]]; then
       cd $ImportDir
@@ -80,14 +91,16 @@ while Boolean $True; do
       mv * .$RepoName
       mv .$RepoName $RepoName
       git add -A
-      git commit -m "[$ExeName] Moving $RepoName to subdirectory"
+      git commit -m "[$ExeName] Moving $RepoName into $BaseName/$RepoName"
       cd ..
       git remote add -f Import $ImportDir
       rm -rf $ImportDir
-      git merge Import/master -m "[$ExeName] Merging $RepoName into $BaseName"
+      git merge Import/master -m "[$ExeName] Merging $RepoName into $BaseName/$RepoName"
       git remote rm Import
+      echo "* [$RepoName](./$RepoName)" >> README.md
       git add -A
-      git commit -m "[$ExeName] Finalizing $RepoName"
+      git commit -m "[$ExeName] Finalizing $BaseName/$RepoName"
+      git tag $RepoName
    else
       rm -rf $BaseDir
       Error "Error cloning in $RepoUrl, aborting"
@@ -100,7 +113,9 @@ Echo "Successfully processed $BaseName"
 Echo "Enter in a remote repository URL to push the merged repo to, or nothing to finish. (URL)"
 Read -p $ReadPrefix -t 30 BaseUrl
 if [[ $BaseUrl != "" ]]; then
+   Echo "Pushing $(EchoColor Yellow)$BaseName$(EchoColor) to $(EchoColor Yellow)$BaseUrl$(EchoColor)"
    git remote add origin $BaseUrl
-   git push origin master
+   git push origin +master
+   git push origin --tags
 fi
 Exit
