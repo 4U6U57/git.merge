@@ -14,7 +14,8 @@ Then, run it from wherever you want with `~/bin/gitmerge/gitmerge.sh` (add
 `~/bin/gitmerge` to your PATH to make it easier).
 
 ## Usage
-Simply run `~/bin/gitmerge/gitmerge.sh` in the directory you would like to 
+Simply run `~/bin/gitmerge/gitmerge.sh` in the directory you would like to
+create the merged repository.
 
 ## File Input
 Format a file as follows, for automated merging, then run with input redirect
