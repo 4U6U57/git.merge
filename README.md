@@ -55,7 +55,7 @@ into the subdirectory *merge*, and *vimrc* into the default subdirectory name.
 ```
 example
 git@github.com:4U6U57/gitmerge merge
-git@github.com:4U6U57/vimrc
+http://bitbucket.org/4U6U57/vimrc
 
 git@github.com:4U6U57/example.merge
 ```
